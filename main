@@ -7,7 +7,7 @@ struct ContentView: View {
     var body: some View {
         VStack{
         HStack{
-            ForEach(emojis[0..<emojiCount], id: \.self) content: { emoji in
+            ForEach(emojis[0..<emojiCount], id: \.self) { emoji in
                 CardView(content: emoji)
             }
                     }
