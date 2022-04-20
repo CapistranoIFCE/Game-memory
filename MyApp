@@ -1,0 +1,22 @@
+import SwiftUI
+
+@main
+struct MyApp: App {
+    
+    let game = EmojiMemoryGame()
+    
+    @State var didStartGame = false
+    
+    var body: some Scene {
+        WindowGroup {
+            Group {
+                if didStartGame {
+                    ContentView(viewModel: game)
+                } else {
+                    Welcome(didFinish: { didStartGame = true })
+                }
+            }
+            .animation(.default, value: didStartGame)
+        }
+    }
+}
