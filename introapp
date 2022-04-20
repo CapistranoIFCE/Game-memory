@@ -1,0 +1,99 @@
+import SwiftUI
+
+struct OnBoardingStep {
+    let image: String
+    let title: String
+    let description: String
+}
+
+private let onBoardingSteps = [
+    OnBoardingStep(image: "onBoarding1", title: "Primeiro comentário", description: "Forget about a for of paper all knowledge in one learning!"),
+    OnBoardingStep(image: "onBoarding2", title: "Primeiro comentário", description: "Forget about a for of paper all knowledge in one learning!"),
+    OnBoardingStep(image: "onBoarding3", title: "Primeiro comentário", description: "Forget about a for of paper all knowledge in one learning!"),
+
+]
+
+struct ContentView: View {
+    @State private var currentStep = 0
+
+    init(){
+        UIScrollView.appearance().bounces = false
+    }
+    var body: some View {
+        VStack {
+            HStack{
+                Spacer()
+                Button(action: {
+                    self.currentStep = onBoardingStep.count -1
+                }){
+                    Text("Skip")
+                    .padding(16)
+                    .foregroundColor(.gray)
+
+                }
+                }
+        
+            TabView(selection: $currentStep){
+                ForEach(0..<onBoardingStep.count) {it in
+            VStack{
+
+            Image("onBoarding1")
+            .resizable()
+            .frame(width: 250, height: 250)
+
+            Text("Lorem ipsum")
+            .font(.title)
+            .bold()
+
+            Text("Lorem ipsum")
+            .multilineTextAlignment(.center)
+            .padding(.horizontal, 32)
+            .padding(.top, 16)
+
+             }
+             .tag(it)
+        }
+    }
+            .tagViewStyle(PageTabViewStyle(indexDisplayMode: .never))
+            HSTack{
+            ForEach(0..<onBoardingSteps.count) { it in
+            if it == currentStep {
+                Rectangle()
+                .frame(width: 20, height: 10)
+                .cornerRadius(10)
+                .foregroundColor(.purple)
+                
+                }else {
+                    Circle()
+                    .frame(white: 10, height: 10)
+                    .foregroundColor(.gray)
+                }
+            }
+  }
+  .padding(.bottom, 24 )
+
+            Button(action: {
+                if self.currentStep < onBoardingSteps.count - 1 {
+                    self.currentStep += 1
+                }else {
+                    // get started logic
+                }
+            }) {
+                Text(currentStep < onBoardingSteps.count - 1 ? "Next" : "Get stared")
+                .padding(16)
+                .frame(maxWidth: .infinity)
+                .background(Color.purple)
+                .cornerRadius(16)
+                .padding(.horizontal, 16)
+                .foregroundColor(.white)
+                }
+                .buttonStyle(PlainButtonStyle())
+        }
+    }
+}
+
+struct ContentView_Preview: PreviewProvider {
+    static var previews: some View{
+        ContentView()
+    }
+}
