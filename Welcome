@@ -1,0 +1,112 @@
+//
+//  GameScene.swift
+//  testeplayground
+//
+//  Created by Davi Capistrano on 18/04/22.
+//
+
+import SwiftUI
+
+struct OnBoardingStep {
+    let image: String
+    let title: String
+    let description: String
+}
+
+
+
+struct Welcome: View {
+    
+    @State private var currentStep = 0
+    
+    private let onBoardingSteps = [
+        OnBoardingStep(image: "onBoarding1", title: "Introducao ao Programinha: ", description: "Vamos começar a jogar!!!"),
+        OnBoardingStep(image: "onBoarding2", title: "Primeiro vamos entender o game", description: "Este game tem o intuito de transformar a vida"),
+        OnBoardingStep(image: "onBoarding3", title: "Lets GO!!!", description: "O jogo está começando"),
+        
+    ]
+    
+    let didFinish: () -> Void
+    
+    init(didFinish: @escaping () -> Void){
+        self.didFinish = didFinish
+        UIScrollView.appearance().bounces = false
+    }
+    var body: some View {
+        VStack {
+            HStack{
+                Spacer()
+                Button(action: {
+                    self.currentStep = onBoardingSteps.count - 1
+                }){
+                    Text("Skip")
+                        .padding(16)
+                        .foregroundColor(.gray)
+                    
+                }
+            }
+            
+            TabView(selection: $currentStep){
+                ForEach(0 ..< onBoardingSteps.count) {it in
+                    let step = onBoardingSteps[it]
+                    VStack{
+                        Image(step.image)
+                            .resizable()
+                            .frame(width: 250, height: 250)
+                        
+                        Text(step.title)
+                            .font(.title)
+                            .bold()
+                        
+                        Text(step.description)
+                            .multilineTextAlignment(.center)
+                            .padding(.horizontal, 32)
+                            .padding(.top, 16)
+                    }
+                    .tag(it)
+                }
+            }
+                .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
+            
+            HStack {
+                ForEach(0..<onBoardingSteps.count) { it in
+                    if it == currentStep {
+                        Rectangle()
+                            .frame(width: 20, height: 10)
+                            .cornerRadius(10)
+                            .foregroundColor(.purple)
+                        
+                    } else {
+                        Circle()
+                            .frame(width: 10, height: 10)
+                            .foregroundColor(.gray)
+                    }
+                }
+            }
+            .padding(.bottom, 24 )
+            
+            Button(action: {
+                if self.currentStep < onBoardingSteps.count - 1 {
+                    self.currentStep += 1
+                }else {
+                   didFinish()
+                }
+            }) {
+                Text(currentStep < onBoardingSteps.count - 1 ? "Next" : "Get stared")
+                    .padding(16)
+                    .frame(maxWidth: .infinity)
+                    .background(Color.purple)
+                    .cornerRadius(16)
+                    .padding(.horizontal, 16)
+                    .foregroundColor(.white)
+            }
+            .buttonStyle(PlainButtonStyle())
+        }
+    }
+}
+
+struct Welcome_Preview: PreviewProvider {
+    static var previews: some View{
+        Welcome(didFinish: { })
+    }
+}
